@@ -496,6 +496,7 @@ void Seq::seqMessage(int msg, int arg)
 void Seq::playEvent(const NPlayEvent& event, unsigned framePos)
       {
       int type = event.type();
+      qDebug("send to synth");
       if (type == ME_NOTEON) {
             bool mute;
             const Note* note = event.note();
@@ -544,6 +545,7 @@ void Seq::processMessages()
             if (toSeq.empty())
                   break;
             SeqMsg msg = toSeq.dequeue();
+            qDebug("process messages event type: %d", msg.event.type());
             switch(msg.id) {
                   case SeqMsgId::TEMPO_CHANGE:
                         {
@@ -564,6 +566,7 @@ void Seq::processMessages()
                         }
                         break;
                   case SeqMsgId::PLAY:
+                        qDebug("put message event type %d", msg.event.type());
                         putEvent(msg.event);
                         break;
                   case SeqMsgId::SEEK:
