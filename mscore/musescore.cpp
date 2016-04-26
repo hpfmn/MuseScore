@@ -1867,6 +1867,7 @@ void MuseScore::midiNoteReceived(int channel, int pitch, int velo)
 
 void MuseScore::midiCtrlReceived(int controller, int value)
       {
+      seq->setController(0, controller, value);
       if (!midiinEnabled())
             return;
       if (_midiRecordId != -1) {
