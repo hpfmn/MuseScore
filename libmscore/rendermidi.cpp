@@ -1572,6 +1572,89 @@ int Score::renderMetronome(EventMap* events, Measure* m, int playPos, int tickOf
       return tick + lastPause;
       }
 
+
+void Score::hairPinsToExpressionCtrl(EventMap* events, int staffIdx)
+        {
+        foreach (const RepeatSegment* rs, *repeatList()) {
+              int tickOffset = rs->utick - rs->tick;
+              int utick1 = rs->utick;
+              int tick1 = repeatList()->utick2tick(utick1);
+              int tick2 = tick1 + rs->len;
+              std::map<int, std::vector<std::pair<int, bool>>> channelPedalEvents = std::map<int, std::vector<std::pair<int, bool>>>();
+
+              for (const auto& sp : _spanner.map()) {
+                    Spanner* s = sp.second;
+                    if (s->type() != Element::Type::HAIRPIN || (staffIdx != -1 && s->staffIdx() != staffIdx))
+                          continue;
+
+                    qDebug("hairpin start: %d, hairpin end: %d", s->tick(), s->tick2());
+
+                    int idx = s->staff()->channel(s->tick(), 0);
+                    int channel = s->part()->instrument(s->tick())->channel(idx)->channel;
+
+                    NPlayEvent startEvent = NPlayEvent(ME_CONTROLLER, channel, CTRL_EXPRESSION, 64);
+                    events->insert(std::pair<int,NPlayEvent>(0,startEvent));
+
+                    int ctrlEventCount = 10;
+                    int tickIncrement = s->ticks() / ctrlEventCount;
+                    int ctrlChange;
+                    int curValue = 64;
+                    int curTick = s->tick();
+
+                    Hairpin* h = static_cast<Hairpin*>(s);
+                    if (h->hairpinType() == Hairpin::Type::CRESCENDO)
+                            ctrlChange=6;
+                    else
+                            ctrlChange=-6;
+
+                    for(int i=0;i<ctrlEventCount;i++) {
+                            NPlayEvent event;
+                            startEvent = NPlayEvent(ME_CONTROLLER, channel, CTRL_EXPRESSION, curValue);
+                            events->insert(std::pair<int,NPlayEvent>(curTick,startEvent));
+                            curTick+=tickIncrement;
+                            curValue+=ctrlChange;
+                            }
+
+                    /*
+                    channelPedalEvents.insert({channel, std::vector<std::pair<int, bool>>()});
+                    std::vector<std::pair<int, bool>> pedalEventList = channelPedalEvents.at(channel);
+                    std::pair<int, bool> lastEvent;
+
+                    if (!pedalEventList.empty())
+                          lastEvent = pedalEventList.back();
+                    else
+                          lastEvent = std::pair<int, bool>(0, true);
+
+                    if (s->tick() >= tick1 && s->tick() < tick2) {
+                          // Handle "overlapping" pedal segments (usual case for connected pedal line)
+                          if (lastEvent.second == false && lastEvent.first >= (s->tick() + tickOffset + 2)) {
+                                channelPedalEvents.at(channel).pop_back();
+                                channelPedalEvents.at(channel).push_back(std::pair<int, bool>(s->tick() + tickOffset + 1, false));
+                                }
+                          channelPedalEvents.at(channel).push_back(std::pair<int, bool>(s->tick() + tickOffset + 2, true));
+                          }
+                    if (s->tick2() >= tick1 && s->tick2() <= tick2) {
+                          int t = s->tick2() + tickOffset + 1;
+                          if (t > repeatList()->last()->utick + repeatList()->last()->len)
+                                t = repeatList()->last()->utick + repeatList()->last()->len;
+                          channelPedalEvents.at(channel).push_back(std::pair<int, bool>(t, false));
+                          }*/
+                    }
+
+              /*for (const auto& pedalEvents : channelPedalEvents) {
+                    int channel = pedalEvents.first;
+                    for (const auto& pe : pedalEvents.second) {
+                          NPlayEvent event;
+                          if (pe.second == true)
+                                event = NPlayEvent(ME_CONTROLLER, channel, CTRL_SUSTAIN, 127);
+                          else
+                                event = NPlayEvent(ME_CONTROLLER, channel, CTRL_SUSTAIN, 0);
+                          events->insert(std::pair<int,NPlayEvent>(pe.first, event));
+                          }
+                    }*/
+              }
+        }
+
 //---------------------------------------------------------
 //   renderMidi
 //    export score to event list
@@ -1586,6 +1669,8 @@ void Score::renderMidi(EventMap* events)
       _foundPlayPosAfterRepeats = false;
       masterScore()->updateChannel();
       updateVelo();
+      
+      hairPinsToExpressionCtrl(events, -1);
 
       // create note & other events
       foreach (Staff* part, _staves)
