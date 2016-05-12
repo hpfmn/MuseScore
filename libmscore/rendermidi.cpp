@@ -236,8 +236,8 @@ static void collectNote(EventMap* events, int channel, const Note* note, int vel
                   p = 127;
             int on  = tick1 + (ticks * e.ontime())/1000;
             int off = on + (ticks * e.len())/1000 - 1;
-            if (tieFor && i == nels - 1)
-                  off += tieLen;
+            //if (tieFor && i == nels - 1)
+            //      off += tieLen;
             playNote(events, note, channel, p, velo, on, off);
             }
 
@@ -987,6 +987,8 @@ bool renderNoteArticulation(NoteEventList* events, Note * note, bool chromatic, 
 
       events->clear();
       Chord *chord = note->chord();
+      if (note->tieBack())
+            return false;
       int maxticks = totalTiedNoteTicks(note);
       int space = 1000 * maxticks;
       int numrepeat = 1;
