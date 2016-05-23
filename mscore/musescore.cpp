@@ -2028,6 +2028,7 @@ void MuseScore::midiCtrlReceived(int controller, int value)
       {
       if (!midiinEnabled())
             return;
+      seq->setController(0, controller, value);
       if (_midiRecordId != -1) {
             preferences.midiRemote[_midiRecordId].type = MIDI_REMOTE_TYPE_CTRL;
             preferences.midiRemote[_midiRecordId].data = controller;

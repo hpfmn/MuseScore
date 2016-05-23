@@ -766,6 +766,16 @@ void Voice::voice_start()
       qDebug("DECAY (%d) %d", FLUID_VOICE_ENVDECAY, volenv_data[FLUID_VOICE_ENVDECAY].count);
       qDebug("SUSTAIN (%d) %d", FLUID_VOICE_ENVSUSTAIN, volenv_data[FLUID_VOICE_ENVSUSTAIN].count);
       qDebug("RELEASE (%d) %d", FLUID_VOICE_ENVRELEASE, volenv_data[FLUID_VOICE_ENVRELEASE].count);
+      
+      if (channel->legato()) {
+            volenv_section = FLUID_VOICE_ENVSUSTAIN;
+            volenv_val = volenv_data[FLUID_VOICE_ENVDECAY].min * volenv_data[FLUID_VOICE_ENVDECAY].coeff;
+            modenv_section = FLUID_VOICE_ENVSUSTAIN;
+            if (SAMPLEMODE() == FLUID_LOOP_DURING_RELEASE || SAMPLEMODE() == FLUID_LOOP_UNTIL_RELEASE)
+                  start = loopstart;
+            else
+                  start += volenv_data[FLUID_VOICE_ENVATTACK].count + volenv_data[FLUID_VOICE_ENVDECAY].count;
+            }
 
       /* Force setting of the phase at the first DSP loop run
        * This cannot be done earlier, because it depends on modulators.

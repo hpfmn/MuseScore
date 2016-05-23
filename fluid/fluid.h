@@ -99,7 +99,7 @@ enum fluid_midi_control_change {
       PORTAMENTO_SWITCH = 0x41,
       SOSTENUTO_SWITCH = 0x42,
       SOFT_PEDAL_SWITCH = 0x43,
-      LEGATO_SWITCH = 0x45,
+      LEGATO_SWITCH = 0x44,
       HOLD2_SWITCH = 0x45,
       SOUND_CTRL1 = 0x46,
       SOUND_CTRL2 = 0x47,
@@ -260,6 +260,7 @@ class Channel {
       Channel(Fluid* synth, int num);
 
       bool sustained() const              { return cc[SUSTAIN_SWITCH] >= 64; }
+      bool legato() const                 { return cc[LEGATO_SWITCH] >= 64; }
       void setGen(int n, float v, char a) { gen[n] = v; gen_abs[n] = a; }
       float getGen(int n) const           { return gen[n]; }
       char getGenAbs(int n) const         { return gen_abs[n]; }
