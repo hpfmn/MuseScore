@@ -969,7 +969,8 @@ InspectorSlur::InspectorSlur(QWidget* parent)
             { P_ID::USER_OFF,        0, 0, e.offsetX,       e.resetX             },
             { P_ID::USER_OFF,        1, 0, e.offsetY,       e.resetY             },
             { P_ID::LINE_TYPE,       0, 0, s.lineType,      s.resetLineType      },
-            { P_ID::SLUR_DIRECTION,  0, 0, s.slurDirection, s.resetSlurDirection }
+            { P_ID::SLUR_DIRECTION,  0, 0, s.slurDirection, s.resetSlurDirection },
+            { P_ID::RENDER_LEGATO_EVENTS,  0, 0, s.renderLegatoEvents, s.resetRenderLegatoEvents}
             };
       mapSignals();
       }

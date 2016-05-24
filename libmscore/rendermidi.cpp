@@ -701,7 +701,7 @@ void Score::renderSpanners(EventMap* events, int staffIdx)
 
                   if (s->type() == Element::Type::PEDAL)
                         spannerToChannelEvents(s, channelPedalEvents, rs);
-                  else if(s->type() == Element::Type::SLUR)
+                  else if(s->type() == Element::Type::SLUR && toSlur(s)->renderLegatoEvents())
                         spannerToChannelEvents(s, channelLegatoEvents, rs);
                   }
 

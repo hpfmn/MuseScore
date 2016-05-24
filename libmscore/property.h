@@ -56,6 +56,7 @@ enum class P_ID : unsigned char {
       STEM_DIRECTION,
       NO_STEM,
       SLUR_DIRECTION,
+      RENDER_LEGATO_EVENTS,
       LEADING_SPACE,
       DISTRIBUTE,
       MIRROR_HEAD,

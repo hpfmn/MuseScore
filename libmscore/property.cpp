@@ -61,6 +61,7 @@ static const PropertyData propertyList[] = {
 
       { P_ID::NO_STEM,             false, "noStem",        P_TYPE::INT },
       { P_ID::SLUR_DIRECTION,      false, "slurDirection", P_TYPE::INT },
+      { P_ID::RENDER_LEGATO_EVENTS,false, "renderLegatoEvents", P_TYPE::BOOL },
       { P_ID::LEADING_SPACE,       false, "leadingSpace",  P_TYPE::SPATIUM },
       { P_ID::DISTRIBUTE,          false, "distribute",    P_TYPE::BOOL },
       { P_ID::MIRROR_HEAD,         false, "mirror",        P_TYPE::DIRECTION_H },

@@ -145,6 +145,7 @@ class SlurTie : public Spanner {
 
       QQueue<SlurSegment*> delSegments;   // "deleted" segments
       Direction _slurDirection;
+      bool _renderLegatoEvents;
       qreal firstNoteRestSegmentX(System* system);
       void fixupSegments(unsigned nsegs);
 
@@ -169,7 +170,9 @@ class SlurTie : public Spanner {
       virtual void reset();
 
       int lineType() const                { return _lineType; }
+      bool renderLegatoEvents() const     { return _renderLegatoEvents; }
       void setLineType(int val)           { _lineType = val;  }
+      void setRenderLegatoEvents(bool v)  { _renderLegatoEvents = v; }
       void undoSetLineType(int);
 
       SlurSegment* frontSegment() const   { return (SlurSegment*)spannerSegments().front(); }

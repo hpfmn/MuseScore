@@ -1191,6 +1191,7 @@ QVariant SlurTie::getProperty(P_ID propertyId) const
       switch(propertyId) {
             case P_ID::LINE_TYPE:      return lineType();
             case P_ID::SLUR_DIRECTION: return slurDirection();
+            case P_ID::RENDER_LEGATO_EVENTS: return renderLegatoEvents();
             default:
                   return Spanner::getProperty(propertyId);
             }
@@ -1205,6 +1206,7 @@ bool SlurTie::setProperty(P_ID propertyId, const QVariant& v)
       switch(propertyId) {
             case P_ID::LINE_TYPE:      setLineType(v.toInt()); break;
             case P_ID::SLUR_DIRECTION: setSlurDirection(v.value<Direction>()); break;
+            case P_ID::RENDER_LEGATO_EVENTS: setRenderLegatoEvents(v.value<bool>()); break;
             default:
                   return Spanner::setProperty(propertyId, v);
             }
@@ -1238,6 +1240,8 @@ QVariant SlurSegment::getProperty(P_ID propertyId) const
             case P_ID::LINE_TYPE:
             case P_ID::SLUR_DIRECTION:
                   return slurTie()->getProperty(propertyId);
+            case P_ID::RENDER_LEGATO_EVENTS:
+                  return slurTie()->getProperty(propertyId);
             case P_ID::SLUR_UOFF1:
                   return ups(Grip::START).off;
             case P_ID::SLUR_UOFF2:
@@ -1260,6 +1264,7 @@ bool SlurSegment::setProperty(P_ID propertyId, const QVariant& v)
       switch(propertyId) {
             case P_ID::LINE_TYPE:
             case P_ID::SLUR_DIRECTION:
+            case P_ID::RENDER_LEGATO_EVENTS:
                   return slurTie()->setProperty(propertyId, v);
             case P_ID::SLUR_UOFF1:
                   ups(Grip::START).off = v.toPointF();
