@@ -27,6 +27,7 @@
 #include "ottava.h"
 #include "spannermap.h"
 #include "rehearsalmark.h"
+#include "repeatlist.h"
 
 class QPainter;
 
@@ -808,6 +809,7 @@ class Score : public QObject, public ScoreElement {
       PasteState pasteStaff(XmlReader&, Segment* dst, int staffIdx);
       void pasteSymbols(XmlReader& e, ChordRest* dst);
       void renderMidi(EventMap* events);
+      void spannerToChannelEvents(Spanner *s, std::map<int, std::vector<std::pair<int, bool>>> &channelEvents, const RepeatSegment* rs);
       void renderStaff(EventMap* events, Staff*);
       void renderSpanners(EventMap* events, int staffIdx);
       int renderMetronome(EventMap* events, Measure* m, int playPos, int tickOffset, bool countIn);
