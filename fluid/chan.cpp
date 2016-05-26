@@ -92,6 +92,11 @@ void Channel::initCtrl()
       setCC(EXPRESSION_LSB, 127);
       }
 
+int Channel::voiceCount()
+      {
+      return synth->voicesOnChannel(this);
+      }
+
 //---------------------------------------------------------
 //   setcc
 //---------------------------------------------------------

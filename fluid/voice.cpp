@@ -246,6 +246,7 @@ void Voice::calcVolEnv(int n, fluid_env_data_t *env_data)
 
 void Voice::write(unsigned n, float* out, float* reverb, float* chorus)
       {
+      //qDebug("N %d",n);
       /* make sure we're playing and that we have sample data */
       if (!PLAYING())
             return;
@@ -767,6 +768,8 @@ void Voice::voice_start()
       qDebug("SUSTAIN (%d) %d", FLUID_VOICE_ENVSUSTAIN, volenv_data[FLUID_VOICE_ENVSUSTAIN].count);
       qDebug("RELEASE (%d) %d", FLUID_VOICE_ENVRELEASE, volenv_data[FLUID_VOICE_ENVRELEASE].count);
       
+      qDebug("Voices on Channel %d", channel->voiceCount());
+
       if (channel->legato()) {
             volenv_section = FLUID_VOICE_ENVSUSTAIN;
             volenv_val = volenv_data[FLUID_VOICE_ENVDECAY].min * volenv_data[FLUID_VOICE_ENVDECAY].coeff;
@@ -775,6 +778,9 @@ void Voice::voice_start()
                   start = loopstart;
             else
                   start += volenv_data[FLUID_VOICE_ENVATTACK].count + volenv_data[FLUID_VOICE_ENVDECAY].count;
+            //volenv_data[FLUID_VOICE_ENVATTACK].count=20;
+            //volenv_data[FLUID_VOICE_ENVDECAY].count=20;
+            //volenv_data[FLUID_VOICE_ENVHOLD].count=0;
             }
 
       /* Force setting of the phase at the first DSP loop run

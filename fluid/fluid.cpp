@@ -266,6 +266,16 @@ void Fluid::modulate_voices(int chan, bool is_cc, int ctrl)
             }
       }
 
+
+int Fluid::voicesOnChannel(Channel* chan)
+      {
+      int voiceCount = 0;
+      for (Voice*v : activeVoices)
+            if (v->channel == chan && v->volenv_section!=FLUID_VOICE_ENVRELEASE)
+                  voiceCount++;
+      return voiceCount;
+      }
+
 /*
  * fluid_synth_modulate_voices_all
  *
@@ -396,8 +406,11 @@ void Fluid::update_presets()
 void Fluid::process(unsigned len, float* out, float* effect1, float* effect2)
       {
       if (mutex.tryLock()) {
+#define FLUID_INT_BUF 16
             foreach (Voice* v, activeVoices)
-                  v->write(len, out, effect1, effect2);
+                  for(int i=0;i<len/FLUID_INT_BUF;i++) {
+                        v->write(FLUID_INT_BUF, out+(i*FLUID_INT_BUF*2), effect1, effect2);
+                        }
             mutex.unlock();
             }
       }

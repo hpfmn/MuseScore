@@ -1471,7 +1471,7 @@ void Score::createGraceNotesPlayEvents(QVector<Chord*> gnb, int tick, Chord* cho
 
 void Score::createPlayEvents(Chord* chord)
       {
-      int gateTime = 100;
+      int gateTime = 90;
 
       int tick = chord->tick();
       Slur* slur = 0;
