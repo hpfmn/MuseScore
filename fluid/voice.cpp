@@ -771,16 +771,16 @@ void Voice::voice_start()
       qDebug("Voices on Channel %d", channel->voiceCount());
 
       if (channel->legato()) {
-            volenv_section = FLUID_VOICE_ENVSUSTAIN;
-            volenv_val = volenv_data[FLUID_VOICE_ENVDECAY].min * volenv_data[FLUID_VOICE_ENVDECAY].coeff;
-            modenv_section = FLUID_VOICE_ENVSUSTAIN;
             if (SAMPLEMODE() == FLUID_LOOP_DURING_RELEASE || SAMPLEMODE() == FLUID_LOOP_UNTIL_RELEASE)
                   start = loopstart;
             else
                   start += volenv_data[FLUID_VOICE_ENVATTACK].count + volenv_data[FLUID_VOICE_ENVDECAY].count;
-            //volenv_data[FLUID_VOICE_ENVATTACK].count=20;
-            //volenv_data[FLUID_VOICE_ENVDECAY].count=20;
-            //volenv_data[FLUID_VOICE_ENVHOLD].count=0;
+
+            // Have 100 Samples fade in
+            volenv_data[FLUID_VOICE_ENVDELAY].count=0;
+            volenv_data[FLUID_VOICE_ENVATTACK].count=100;
+            volenv_data[FLUID_VOICE_ENVDECAY].count=0;
+            volenv_data[FLUID_VOICE_ENVHOLD].count=0;
             }
 
       /* Force setting of the phase at the first DSP loop run

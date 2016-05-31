@@ -680,7 +680,7 @@ void channelEventsToMidiEvents(std::map<int, std::vector<std::pair<int, bool>>> 
                         event = NPlayEvent(ME_CONTROLLER, channel, CTRL, 127);
                   else
                         event = NPlayEvent(ME_CONTROLLER, channel, CTRL, 0);
-                  events->insert(std::pair<int,NPlayEvent>(ce.first, event));
+                  events->insert(std::pair<int,NPlayEvent>(ce.first+1, event));
                   }
             }
       }
@@ -1471,7 +1471,7 @@ void Score::createGraceNotesPlayEvents(QVector<Chord*> gnb, int tick, Chord* cho
 
 void Score::createPlayEvents(Chord* chord)
       {
-      int gateTime = 90;
+      int gateTime = 110;
 
       int tick = chord->tick();
       Slur* slur = 0;
