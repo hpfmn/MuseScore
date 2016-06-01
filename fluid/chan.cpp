@@ -97,6 +97,11 @@ int Channel::voiceCount()
       return synth->voicesOnChannel(this);
       }
 
+void Channel::releaseActiveVoices()
+      {
+      return synth->releaseActiveVoicesWithCrossfade(this);
+      }
+
 //---------------------------------------------------------
 //   setcc
 //---------------------------------------------------------

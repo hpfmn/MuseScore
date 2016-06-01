@@ -277,6 +277,7 @@ class Channel {
       void setPrognum(int p)              { prognum = p;     }
       int getPrognum() const              { return prognum;  }
       int voiceCount();
+      void releaseActiveVoices();
       void setcc(int ctrl, int val);
       void pitchBend(int val);
       int getPitchBend() const            { return pitch_bend; }
@@ -349,6 +350,7 @@ class Fluid : public Synthesizer {
       Preset* find_preset(unsigned int banknum, unsigned int prognum);
       void modulate_voices(int chan, bool is_cc, int ctrl);
       void modulate_voices_all(int chan);
+      void releaseActiveVoicesWithCrossfade(Channel* chan);
       int  voicesOnChannel(Channel* chan);
       void damp_voices(int chan);
       int kill_voice(Voice * voice);

@@ -64,6 +64,8 @@ struct VolEnvValSection {
       int volenv_section;
       };
 
+#define VOICE_CROSSFADE_SAMPLES 1200
+
 //---------------------------------------------------------
 //   Voice
 //---------------------------------------------------------
@@ -76,6 +78,8 @@ class Voice
 
       Fluid* _fluid;
       double _noteTuning;             // +/- in midicent
+
+      bool _legato;
 
       void effects(int count, float* out, float* effect1, float* effect2);
 

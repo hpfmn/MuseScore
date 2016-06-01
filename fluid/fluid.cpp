@@ -266,12 +266,21 @@ void Fluid::modulate_voices(int chan, bool is_cc, int ctrl)
             }
       }
 
+void Fluid::releaseActiveVoicesWithCrossfade(Channel* chan)
+      {
+      for (Voice*v : activeVoices)
+            if (v->channel == chan && v->volenv_section!=FLUID_VOICE_ENVRELEASE && v->volenv_section!=FLUID_VOICE_ENVDELAY) {
+                        v->volenv_data[FLUID_VOICE_ENVRELEASE].count = VOICE_CROSSFADE_SAMPLES;
+                        v->volenv_data[FLUID_VOICE_ENVRELEASE].incr = -1.0f/VOICE_CROSSFADE_SAMPLES;
+                        v->noteoff();
+                  }
+      }
 
 int Fluid::voicesOnChannel(Channel* chan)
       {
       int voiceCount = 0;
       for (Voice*v : activeVoices)
-            if (v->channel == chan && v->volenv_section!=FLUID_VOICE_ENVRELEASE)
+            if (v->channel == chan && v->volenv_section!=FLUID_VOICE_ENVRELEASE && v->volenv_section!=FLUID_VOICE_ENVDELAY)
                   voiceCount++;
       return voiceCount;
       }
@@ -406,11 +415,8 @@ void Fluid::update_presets()
 void Fluid::process(unsigned len, float* out, float* effect1, float* effect2)
       {
       if (mutex.tryLock()) {
-#define FLUID_INT_BUF 16
             foreach (Voice* v, activeVoices)
-                  for(int i=0;i<len/FLUID_INT_BUF;i++) {
-                        v->write(FLUID_INT_BUF, out+(i*FLUID_INT_BUF*2), effect1, effect2);
-                        }
+                  v->write(len, out, effect1, effect2);
             mutex.unlock();
             }
       }
