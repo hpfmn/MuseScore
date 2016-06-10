@@ -154,6 +154,7 @@ class Voice
 	unsigned int viblfo_delay;      /* the delay of the lfo in samples */
 	float viblfo_incr;       /* the lfo frequency is converted to a per-buffer increment */
 	float viblfo_to_pitch;
+   void setLegato(bool v) { _legato = v; }
 
 	/* resonant filter */
 	float fres;              /* the resonance frequency, in cents (not absolute cents) */

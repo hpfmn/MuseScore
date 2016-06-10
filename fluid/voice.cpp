@@ -397,7 +397,7 @@ void Voice::write(unsigned n, float* out, float* reverb, float* chorus)
 
             volenv_section = oldVolEnvSection->second;
 
-            if (volenv_section <= FLUID_VOICE_ENVATTACK) {
+            if (volenv_section <= FLUID_VOICE_ENVATTACK || (volenv_section==FLUID_VOICE_ENVRELEASE && _legato)) {
                   /* the envelope is in the attack section: ramp linearly to max value.
                    * A positive modlfo_to_vol should increase volume (negative attenuation).
                    */
@@ -1311,6 +1311,9 @@ void Voice::update_param(int _gen)
 
 void Voice::modulate(bool _cc, int _ctrl)
       {
+      if (_cc && _ctrl == LEGATO_SWITCH && !channel->legato())
+            _legato = false;
+
       for (int i = 0; i < mod_count; i++) {
             Mod* m = &mod[i];
 

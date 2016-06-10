@@ -272,6 +272,7 @@ void Fluid::releaseActiveVoicesWithCrossfade(Channel* chan)
             if (v->channel == chan && v->volenv_section!=FLUID_VOICE_ENVRELEASE && v->volenv_section!=FLUID_VOICE_ENVDELAY) {
                         v->volenv_data[FLUID_VOICE_ENVRELEASE].count = VOICE_CROSSFADE_SAMPLES;
                         v->volenv_data[FLUID_VOICE_ENVRELEASE].incr = -1.0f/VOICE_CROSSFADE_SAMPLES;
+                        v->setLegato(true);
                         v->noteoff();
                   }
       }
