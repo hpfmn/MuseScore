@@ -397,7 +397,7 @@ void Voice::write(unsigned n, float* out, float* reverb, float* chorus)
 
             volenv_section = oldVolEnvSection->second;
 
-            if (volenv_section <= FLUID_VOICE_ENVATTACK || (volenv_section==FLUID_VOICE_ENVRELEASE && _legato)) {
+            if (volenv_section <= FLUID_VOICE_ENVATTACK || (volenv_section == FLUID_VOICE_ENVRELEASE && _legato)) {
                   /* the envelope is in the attack section: ramp linearly to max value.
                    * A positive modlfo_to_vol should increase volume (negative attenuation).
                    */
@@ -774,28 +774,14 @@ void Voice::voice_start()
       if (channel->legato()) {
             if (SAMPLEMODE() == FLUID_LOOP_DURING_RELEASE || SAMPLEMODE() == FLUID_LOOP_UNTIL_RELEASE)
                   start = loopstart;
-            /*else
-                  start += volenv_data[FLUID_VOICE_ENVATTACK].count + volenv_data[FLUID_VOICE_ENVDECAY].count;*/
 
-            //volenv_section = FLUID_VOICE_ENVSUSTAIN;
-            //volenv_val=1;
-            //modenv_section = FLUID_VOICE_ENVSUSTAIN;
-
-            // Have 100 Samples fade in
-            //volenv_data[FLUID_VOICE_ENVDELAY].count=0;
             volenv_data[FLUID_VOICE_ENVATTACK].count = VOICE_CROSSFADE_SAMPLES-1;
             float end_of_decay = volenv_data[FLUID_VOICE_ENVDECAY].min * volenv_data[FLUID_VOICE_ENVDECAY].coeff;
             volenv_data[FLUID_VOICE_ENVATTACK].incr = (end_of_decay)/(VOICE_CROSSFADE_SAMPLES-1.0f);
             volenv_data[FLUID_VOICE_ENVDECAY].count = 1;
             volenv_data[FLUID_VOICE_ENVDECAY].incr = 0;
             _legato = true;
-            channel->releaseActiveVoices();
-            //volenv_data[FLUID_VOICE_ENVATTACK].coeff=volenv_data[FLUID_VOICE_ENVSUSTAIN].coeff;
-            //volenv_data[FLUID_VOICE_ENVATTACK].min=volenv_data[FLUID_VOICE_ENVSUSTAIN].min;
-            //volenv_data[FLUID_VOICE_ENVATTACK].max=volenv_data[FLUID_VOICE_ENVSUSTAIN].max;
-            //modenv_section = FLUID_VOICE_ENVSUSTAIN;
-            //volenv_data[FLUID_VOICE_ENVDECAY].count=0;
-            //volenv_data[FLUID_VOICE_ENVHOLD].count=0;
+            channel->releaseActiveVoicesForLegato();
             }
       else
             _legato = false;

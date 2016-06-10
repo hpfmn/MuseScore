@@ -266,7 +266,7 @@ void Fluid::modulate_voices(int chan, bool is_cc, int ctrl)
             }
       }
 
-void Fluid::releaseActiveVoicesWithCrossfade(Channel* chan)
+void Fluid::releaseActiveVoicesForLegato(Channel* chan)
       {
       for (Voice*v : activeVoices)
             if (v->channel == chan && v->volenv_section!=FLUID_VOICE_ENVRELEASE && v->volenv_section!=FLUID_VOICE_ENVDELAY) {
