@@ -1471,7 +1471,7 @@ void Score::createGraceNotesPlayEvents(QVector<Chord*> gnb, int tick, Chord* cho
 
 void Score::createPlayEvents(Chord* chord)
       {
-      int gateTime = 110;
+      int gateTime = 105;
 
       int tick = chord->tick();
       Slur* slur = 0;
@@ -1479,20 +1479,26 @@ void Score::createPlayEvents(Chord* chord)
             if (sp.second->type() != Element::Type::SLUR || sp.second->staffIdx() != chord->staffIdx())
                   continue;
             Slur* s = static_cast<Slur*>(sp.second);
-            if (tick >= s->tick() && tick < s->tick2()) {
+            if (tick >= s->tick() && tick <= s->tick2()) {
                   slur = s;
                   break;
                   }
-            }
-      // gateTime is 100% for slured notes
-      if (!slur) {
-            Instrument* instr = chord->part()->instrument(tick);
-            instr->updateGateTime(&gateTime, 0, "");
             }
 
       int ontime = 0;
 
       createGraceNotesPlayEvents(chord->graceNotesBefore(), tick, chord, ontime);
+
+      // gateTime is 100% for slured notes
+      if (!slur) {
+            Instrument* instr = chord->part()->instrument(tick);
+            instr->updateGateTime(&gateTime, 0, "");
+            }
+      else {
+            if (slur->tick() != chord->tick())
+                  ontime -= 50;
+            }
+
 
       SwingParameters st = chord->staff()->swing(tick);
       int unit = st.swingUnit;
