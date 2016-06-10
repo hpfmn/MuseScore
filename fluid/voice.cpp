@@ -1376,7 +1376,7 @@ void Voice::noteoff()
       if (channel && channel->sustained())
             status = FLUID_VOICE_SUSTAINED;
       else {
-            if (volenv_section == FLUID_VOICE_ENVATTACK) {
+            if (volenv_section == FLUID_VOICE_ENVATTACK && !_legato) {
                   /* A voice is turned off during the attack section of the volume
                   * envelope.  The attack section ramps up linearly with
                   * amplitude. The other sections use logarithmic scaling. Calculate new
