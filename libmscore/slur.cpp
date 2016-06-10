@@ -694,6 +694,7 @@ SlurTie::SlurTie(Score* s)
       _slurDirection = Direction::AUTO;
       _up            = true;
       _lineType      = 0;     // default is solid
+      _renderLegatoEvents = true;
       }
 
 SlurTie::SlurTie(const SlurTie& t)
@@ -702,6 +703,7 @@ SlurTie::SlurTie(const SlurTie& t)
       _up            = t._up;
       _slurDirection = t._slurDirection;
       _lineType      = t._lineType;
+      _renderLegatoEvents = t.renderLegatoEvents();
       }
 
 //---------------------------------------------------------
@@ -1119,6 +1121,8 @@ void SlurTie::writeProperties(Xml& xml) const
             ((SlurSegment*)ss)->writeSlur(xml, idx++);
       if (_slurDirection != Direction::AUTO)
             xml.tag("up", int(_slurDirection));
+      if (_renderLegatoEvents != true)
+            xml.tag("renderLegato", bool(_renderLegatoEvents));
       if (_lineType)
             xml.tag("lineType", _lineType);
       }
@@ -1150,6 +1154,8 @@ bool SlurTie::readProperties(XmlReader& e)
             _slurDirection = Direction(e.readInt());
       else if (tag == "lineType")
             _lineType = e.readInt();
+      else if (tag == "renderLegato")
+            _renderLegatoEvents = e.readBool();
       else if (!Element::readProperties(e))
             return false;
       return true;
@@ -1225,6 +1231,8 @@ QVariant SlurTie::propertyDefault(P_ID id) const
                   return 0;
             case P_ID::SLUR_DIRECTION:
                   return Direction(Direction::AUTO);
+            case P_ID::RENDER_LEGATO_EVENTS:
+                  return true;
             default:
                   return Spanner::propertyDefault(id);
             }
