@@ -770,17 +770,22 @@ void Voice::voice_start()
       
       qDebug("Voices on Channel %d", channel->voiceCount());
       qDebug("key: %d", key);
+      fadeIn = -1;
+      fadeOut = -1;
 
       if (channel->legato()) {
             if (SAMPLEMODE() == FLUID_LOOP_DURING_RELEASE || SAMPLEMODE() == FLUID_LOOP_UNTIL_RELEASE)
                   start = loopstart;
 
-            volenv_data[FLUID_VOICE_ENVATTACK].count = VOICE_CROSSFADE_SAMPLES-1;
-            float end_of_decay = volenv_data[FLUID_VOICE_ENVDECAY].min * volenv_data[FLUID_VOICE_ENVDECAY].coeff;
-            volenv_data[FLUID_VOICE_ENVATTACK].incr = (end_of_decay)/(VOICE_CROSSFADE_SAMPLES-1.0f);
-            volenv_data[FLUID_VOICE_ENVDECAY].count = 1;
-            volenv_data[FLUID_VOICE_ENVDECAY].incr = 0;
+            //volenv_data[FLUID_VOICE_ENVATTACK].count = VOICE_CROSSFADE_SAMPLES-1;
+            //float end_of_decay = volenv_data[FLUID_VOICE_ENVDECAY].min * volenv_data[FLUID_VOICE_ENVDECAY].coeff;
+            //volenv_data[FLUID_VOICE_ENVATTACK].incr = (end_of_decay)/(VOICE_CROSSFADE_SAMPLES-1.0f);
+            //volenv_data[FLUID_VOICE_ENVDECAY].count = 1;
+            //volenv_data[FLUID_VOICE_ENVDECAY].incr = 0;
+            volenv_section = FLUID_VOICE_ENVSUSTAIN;
+            volenv_val = volenv_data[FLUID_VOICE_ENVDECAY].min * volenv_data[FLUID_VOICE_ENVDECAY].coeff;
             _legato = true;
+            fadeIn = FADE_DURATION;
             channel->releaseActiveVoicesForLegato();
             }
       else

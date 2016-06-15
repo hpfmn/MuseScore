@@ -617,6 +617,7 @@ void fluid_dump_modulator(Mod * mod);
 #define FLUID_INTERP_BITS_MASK   0xff000000
 #define FLUID_INTERP_BITS_SHIFT  24
 #define FLUID_INTERP_MAX         256
+#define FADE_DURATION            1200
 
 #define FLUID_FRACT_MAX ((double)4294967296.0)
 

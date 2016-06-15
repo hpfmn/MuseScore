@@ -75,6 +75,7 @@ class Voice
       static float interp_coeff_linear[FLUID_INTERP_MAX][2];
       static float interp_coeff[FLUID_INTERP_MAX][4];
       static float sinc_table7[FLUID_INTERP_MAX][7];
+      static float fade[FADE_DURATION];
 
       Fluid* _fluid;
       double _noteTuning;             // +/- in midicent
@@ -90,6 +91,8 @@ class Voice
 	unsigned char chan;             // the channel number, quick access for channel messages
 	unsigned char key;              // the key, quick acces for noteoff
 	unsigned char vel;              // the velocity
+   int fadeIn;
+   int fadeOut;
 
 	Channel* channel;
 	Generator gen[GEN_LAST];
@@ -250,6 +253,7 @@ class Voice
       int dsp_float_interpolate_linear(unsigned);
       int dsp_float_interpolate_4th_order(unsigned);
       int dsp_float_interpolate_7th_order(unsigned);
+      bool updateAmpInc(unsigned int &nextNewAmpInc, std::map<int, struct VolEnvValSection>::iterator &curSample2AmpInc, float &dsp_amp_incr, unsigned int dsp_i);
       };
 }
 
