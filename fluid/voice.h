@@ -76,6 +76,7 @@ class Voice
       static float interp_coeff[FLUID_INTERP_MAX][4];
       static float sinc_table7[FLUID_INTERP_MAX][7];
       static float fade[FADE_DURATION];
+      float fade_amp;
 
       Fluid* _fluid;
       double _noteTuning;             // +/- in midicent

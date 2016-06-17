@@ -97,9 +97,9 @@ int Channel::voiceCount()
       return synth->voicesOnChannel(this);
       }
 
-void Channel::releaseActiveVoicesForLegato()
+void Channel::releaseActiveVoicesForLegato(int ticks)
       {
-      return synth->releaseActiveVoicesForLegato(this);
+      return synth->releaseActiveVoicesForLegato(this, ticks);
       }
 
 //---------------------------------------------------------

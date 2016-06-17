@@ -277,7 +277,7 @@ class Channel {
       void setPrognum(int p)              { prognum = p;     }
       int getPrognum() const              { return prognum;  }
       int voiceCount();
-      void releaseActiveVoicesForLegato();
+      void releaseActiveVoicesForLegato(int ticks);
       void setcc(int ctrl, int val);
       void pitchBend(int val);
       int getPitchBend() const            { return pitch_bend; }
@@ -350,7 +350,7 @@ class Fluid : public Synthesizer {
       Preset* find_preset(unsigned int banknum, unsigned int prognum);
       void modulate_voices(int chan, bool is_cc, int ctrl);
       void modulate_voices_all(int chan);
-      void releaseActiveVoicesForLegato(Channel* chan);
+      void releaseActiveVoicesForLegato(Channel* chan, int ticks);
       int  voicesOnChannel(Channel* chan);
       void damp_voices(int chan);
       int kill_voice(Voice * voice);
@@ -617,7 +617,7 @@ void fluid_dump_modulator(Mod * mod);
 #define FLUID_INTERP_BITS_MASK   0xff000000
 #define FLUID_INTERP_BITS_SHIFT  24
 #define FLUID_INTERP_MAX         256
-#define FADE_DURATION            1200
+#define FADE_DURATION            3000
 
 #define FLUID_FRACT_MAX ((double)4294967296.0)
 

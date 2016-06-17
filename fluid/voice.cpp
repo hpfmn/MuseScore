@@ -782,11 +782,12 @@ void Voice::voice_start()
             //volenv_data[FLUID_VOICE_ENVATTACK].incr = (end_of_decay)/(VOICE_CROSSFADE_SAMPLES-1.0f);
             //volenv_data[FLUID_VOICE_ENVDECAY].count = 1;
             //volenv_data[FLUID_VOICE_ENVDECAY].incr = 0;
+            //channel->releaseActiveVoicesForLegato();
+            channel->releaseActiveVoicesForLegato(0);//ticks+1024);
             volenv_section = FLUID_VOICE_ENVSUSTAIN;
             volenv_val = volenv_data[FLUID_VOICE_ENVDECAY].min * volenv_data[FLUID_VOICE_ENVDECAY].coeff;
             _legato = true;
             fadeIn = FADE_DURATION;
-            channel->releaseActiveVoicesForLegato();
             }
       else
             _legato = false;

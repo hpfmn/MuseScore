@@ -266,15 +266,15 @@ void Fluid::modulate_voices(int chan, bool is_cc, int ctrl)
             }
       }
 
-void Fluid::releaseActiveVoicesForLegato(Channel* chan)
+void Fluid::releaseActiveVoicesForLegato(Channel* chan, int ticks)
       {
       for (Voice*v : activeVoices)
-            if (v->channel == chan && v->volenv_section!=FLUID_VOICE_ENVRELEASE && v->volenv_section!=FLUID_VOICE_ENVDELAY) {
-                        v->volenv_data[FLUID_VOICE_ENVRELEASE].count = VOICE_CROSSFADE_SAMPLES;
-                        v->volenv_data[FLUID_VOICE_ENVRELEASE].incr = -1.0f/VOICE_CROSSFADE_SAMPLES;
-                        v->setLegato(true);
-                        v->fadeOut = FADE_DURATION;
-                        v->noteoff();
+            if (v->channel == chan && v->volenv_section!=FLUID_VOICE_ENVRELEASE && v->volenv_section!=FLUID_VOICE_ENVDELAY && v->ticks > ticks) {
+                       // v->volenv_data[FLUID_VOICE_ENVRELEASE].count = VOICE_CROSSFADE_SAMPLES;
+                       // v->volenv_data[FLUID_VOICE_ENVRELEASE].incr = -1.0f/VOICE_CROSSFADE_SAMPLES;
+                       // v->setLegato(true);
+                        v->fadeOut = 4*FADE_DURATION;
+                        //v->noteoff();
                   }
       }
 
