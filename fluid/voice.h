@@ -64,7 +64,7 @@ struct VolEnvValSection {
       int volenv_section;
       };
 
-#define VOICE_CROSSFADE_SAMPLES 1200
+#define VOICE_CROSSFADE_SAMPLES 3000
 
 //---------------------------------------------------------
 //   Voice

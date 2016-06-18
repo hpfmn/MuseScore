@@ -771,6 +771,8 @@ void Voice::voice_start()
       qDebug("Voices on Channel %d", channel->voiceCount());
       qDebug("key: %d", key);
 
+      qDebug("Pitch val %f mod %f", gen[GEN_PITCH].val, gen[GEN_PITCH].mod);
+
       if (channel->legato()) {
             if (SAMPLEMODE() == FLUID_LOOP_DURING_RELEASE || SAMPLEMODE() == FLUID_LOOP_UNTIL_RELEASE)
                   start = loopstart;
@@ -780,6 +782,8 @@ void Voice::voice_start()
             volenv_data[FLUID_VOICE_ENVATTACK].incr = (end_of_decay)/(VOICE_CROSSFADE_SAMPLES-1.0f);
             volenv_data[FLUID_VOICE_ENVDECAY].count = 1;
             volenv_data[FLUID_VOICE_ENVDECAY].incr = 0;
+            gen[GEN_PITCH].mod = 0;
+            update_param(GEN_PITCH);
             _legato = true;
             channel->releaseActiveVoicesForLegato();
             }

@@ -241,6 +241,50 @@ static void collectNote(EventMap* events, int channel, const Note* note, int vel
             playNote(events, note, channel, p, velo, on, off);
             }
 
+      Slur* slur = 0;
+      int tick = chord->tick();
+      for (auto sp : chord->score()->spannerMap().map()) {
+            if (sp.second->type() != Element::Type::SLUR || sp.second->staffIdx() != chord->staffIdx())
+                  continue;
+            Slur* s = static_cast<Slur*>(sp.second);
+            if (tick >= s->tick() && tick <= s->tick2()) {
+                  slur = s;
+                  break;
+                  }
+            }
+      if (slur && slur->renderLegatoEvents()) {
+            ChordRest* nextChordRest = chord->segment()->next1()->nextChordRest(chord->track(), false);
+            if (nextChordRest && nextChordRest->isChord() && slur->tick2() != chord->tick()) {
+                  Chord* nextChord = toChord(nextChordRest);
+                 int pitchDiff = nextChord->notes().front()->pitch() - chord->notes().front()->pitch();
+                 int pstart = chord->tick() + 0.80*chord->actualTicks();
+                 int pend =  chord->tick() + 0.90*chord->actualTicks();
+                 for (int i = 0; i <= pend-pstart; i++) {
+                       int p = ((float) i/((float) (pend-pstart)))*50*pitchDiff;
+                       // We don't support negative pitch, but Midi does. Let's center by adding 8192.
+                       int midiPitch = (p * 16384) / 1200 + 8192;
+                       // Representing pitch as two bytes
+                       int msb = midiPitch / 128;
+                       int lsb = midiPitch % 128;
+                       NPlayEvent ev(ME_PITCHBEND, channel, lsb, msb);
+                       events->insert(std::pair<int, NPlayEvent>(pstart+i, ev));
+                       }
+                 /*int midiPitch =8192;
+                 int msb = midiPitch / 128;
+                 int lsb = midiPitch % 128;
+                 NPlayEvent ev(ME_PITCHBEND, channel, lsb, msb);
+                 events->insert(std::pair<int, NPlayEvent>(nextChord->tick(), ev));*/
+                 }
+            if (slur->tick2() == chord->tick()) {
+                 int midiPitch =8192;
+                 int msb = midiPitch / 128;
+                 int lsb = midiPitch % 128;
+                 NPlayEvent ev(ME_PITCHBEND, channel, lsb, msb);
+                 events->insert(std::pair<int, NPlayEvent>(chord->tick()+chord->actualTicks(), ev));
+                  }
+            }
+
+
       // Bends
       for (Element* e: note->el()) {
             if (e == 0 || e->type() != Element::Type::BEND)
