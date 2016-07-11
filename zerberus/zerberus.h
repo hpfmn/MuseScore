@@ -24,6 +24,7 @@
 
 class Channel;
 class ZInstrument;
+class TestSfzInputControls;
 enum class Trigger : char;
 
 static const int MAX_VOICES  = 512;
