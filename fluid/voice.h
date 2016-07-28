@@ -23,6 +23,7 @@
 
 #include "fluid.h"
 #include "gen.h"
+#include <set>
 
 namespace FluidS {
 
